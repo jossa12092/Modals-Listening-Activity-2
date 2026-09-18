@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en" translate="no" class="notranslate">
+<head>
+<meta charset="utf-8">
+<meta name="google" content="notranslate">
+<meta name="robots" content="notranslate">
+<meta http-equiv="Content-Language" content="en">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Modal Challenge — Must / Mustn't / Should / Shouldn't</title>
+<style>
+:root{--green:#74c227;--dark:#327e38;--red:#d6493f;--ink:#2d302d;--muted:#6a726a;--bg:#eef7e7;--card:#fff;--line:#d7e4ce;--pale:#eef8e4;--palered:#fcecea;--shadow:0 10px 28px rgba(30,70,25,.12)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#eaf5df 0%,#f7fbf3 45%,#e3f1d6 100%)}body{padding:18px}.app{max-width:920px;margin:auto}.header{background:linear-gradient(135deg,var(--green),#5aa51e);color:#fff;border-radius:22px;padding:22px 22px 18px;box-shadow:var(--shadow);position:sticky;top:8px;z-index:10}.header-top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}.header h1{margin:0;font-size:clamp(23px,5vw,34px);line-height:1.05}.header p{margin:8px 0 0;opacity:.94;font-weight:600}.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.badge{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);padding:7px 10px;border-radius:999px;font-size:13px;font-weight:800}.timer{font-variant-numeric:tabular-nums;font-size:19px;font-weight:900;background:#fff;color:var(--dark);padding:8px 12px;border-radius:12px}.progress{height:10px;background:rgba(255,255,255,.28);border-radius:999px;overflow:hidden;margin-top:14px}.progress>div{height:100%;width:0;background:#fff;transition:.25s}.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;margin:18px 0;box-shadow:var(--shadow)}.start h2,.result h2{margin-top:0;color:var(--dark)}.note{background:var(--pale);border:1px solid #cfe6ba;border-radius:15px;padding:14px 16px;line-height:1.45}.small{font-size:13px;color:var(--muted)}label{font-weight:800}input[type=text]{width:100%;font-size:16px;border:1px solid #cdd8c7;border-radius:12px;padding:13px;margin-top:7px;outline:none}input[type=text]:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(116,194,39,.14)}.btn{appearance:none;border:0;border-radius:13px;padding:12px 18px;font-size:15px;font-weight:900;cursor:pointer;background:var(--green);color:#fff;box-shadow:0 4px 12px rgba(70,130,30,.15)}.btn.secondary{background:#eef5e9;color:var(--dark);border:1px solid #cfe0c5;box-shadow:none}.btn.red{background:var(--red)}.btn:disabled{opacity:.45;cursor:not-allowed}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.question-card{display:none}.question-card.active{display:block;animation:fade .18s ease}@keyframes fade{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:none}}.qmeta{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.qnum{font-weight:900;color:var(--dark)}.section-tag{font-size:12px;font-weight:900;letter-spacing:.4px;padding:7px 10px;border-radius:999px;background:var(--pale);color:var(--dark)}.qtext{font-size:clamp(19px,3.6vw,25px);font-weight:900;line-height:1.25;margin:18px 0 16px}.audio-panel{background:#f6faf3;border:1px solid #d8e9cd;border-radius:16px;padding:14px;margin:10px 0 17px}.audio-title{font-weight:900;color:var(--dark);margin-bottom:9px}.speed{padding:9px;border:1px solid #cdd8c7;border-radius:10px;background:white;font-weight:800}.options{display:grid;gap:10px}.option{border:1.5px solid #d9e0d5;border-radius:15px;padding:14px 15px;display:flex;gap:12px;align-items:flex-start;cursor:pointer;background:#fff;transition:.15s}.option:hover{border-color:#9ccc72;background:#fbfef9}.option.selected{border-color:var(--green);background:var(--pale)}.option input{margin-top:3px;transform:scale(1.2)}.option span{font-weight:750;line-height:1.35}
+.option.locked{cursor:default}
+.option.locked:hover{border-color:#d9e0d5;background:#fff}
+.option.answer-correct{border-color:var(--green);background:var(--pale)}
+.option.answer-incorrect{border-color:var(--red);background:var(--palered)}
+.option.answer-correct span{color:#226b29}
+.option.answer-incorrect span{color:#a9342d}
+.option input:disabled{cursor:default}
+.feedback-box{margin-top:14px;border-radius:14px;padding:13px 15px;font-weight:900;font-size:17px;display:flex;align-items:center;gap:9px}
+.feedback-box.correct-feedback{background:var(--pale);border:1.5px solid #9fd174;color:#226b29}
+.feedback-box.incorrect-feedback{background:var(--palered);border:1.5px solid #e7aaa5;color:#a9342d}
+.feedback-box.empty-feedback{display:none}
+.feedback-note{display:block;font-size:12px;font-weight:700;margin-top:3px;opacity:.82}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:20px}.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}.stat{background:#f7fbf4;border:1px solid var(--line);border-radius:15px;padding:15px;text-align:center}.stat strong{display:block;font-size:29px;color:var(--dark)}.review{display:grid;gap:10px;margin-top:12px}.review-item{border:1px solid var(--line);border-radius:13px;padding:12px}.correct{border-left:5px solid var(--green)}.wrong{border-left:5px solid var(--red);background:#fffafa}.hidden{display:none!important}.warn{background:#fff7df;border:1px solid #efd27d;padding:12px 14px;border-radius:12px;font-weight:700;margin-top:12px}.footer{text-align:center;color:var(--muted);font-size:12px;padding:10px 0 24px}.voice-status{font-size:12px;color:var(--muted);margin-top:7px}.audio-check{margin-top:16px;background:#f7fbf4;border:1px solid #cfe0c5;border-radius:15px;padding:14px}.audio-ok{color:#24742b;font-weight:900}.audio-bad{color:#b33b33;font-weight:900}.playing{outline:3px solid rgba(116,194,39,.25)}@media(max-width:640px){body{padding:10px}.card{padding:17px;border-radius:18px}.header{padding:18px 16px}.summary-grid{grid-template-columns:1fr}.nav .btn{flex:1}.timer{font-size:16px}}@media print{body{display:none}}
+
+/* Security + persistence UI */
+#quiz,.header,.result{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.lock-overlay{position:fixed;inset:0;z-index:999999;background:rgba(20,27,19,.96);display:flex;align-items:center;justify-content:center;padding:18px}
+.lock-overlay.hidden{display:none!important}
+.lock-box{width:min(460px,94vw);background:#fff;border-radius:22px;padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.38);text-align:center}
+.lock-icon{font-size:42px;line-height:1;margin-bottom:8px}.lock-box h2{margin:8px 0;color:#2f7134}.lock-reason{background:#fff4e5;border:1px solid #f0d199;border-radius:12px;padding:10px 12px;margin:12px 0;color:#76510d;font-weight:750}
+.lock-box input{width:100%;font-size:22px;text-align:center;letter-spacing:6px;border:1px solid #cad7c4;border-radius:12px;padding:12px;margin:8px 0 12px;outline:none}.lock-box input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(116,194,39,.16)}
+.lock-error{min-height:20px;color:var(--red);font-weight:800;font-size:13px}.security-chip{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:7px 10px;border-radius:999px;background:#edf7e5;color:#2f7134;font-size:12px;font-weight:900;border:1px solid #cce3bd}
+body.exam-locked .app{filter:blur(13px);pointer-events:none;user-select:none}body.privacy-blur .app{filter:blur(18px)}
+.saved-attempt{background:#eef8e4;border:1px solid #cce3bd;border-radius:14px;padding:14px;margin-top:14px}.saved-attempt strong{color:var(--dark)}
+@media print{html,body{display:none!important}}
+
+</style>
+</head>
+<body translate="no" class="notranslate">
+<div class="app notranslate" translate="no">
+<header class="header">
+  <div class="header-top"><div><h1>Modal Challenge</h1><p>Must • Mustn’t • Should • Shouldn’t</p></div><div class="timer" id="timer">45:00</div></div>
+  <div class="badges"><span class="badge">30 questions</span><span class="badge">10 Listening</span><span class="badge">20 Multiple Choice</span></div>
+  <div class="progress"><div id="progressBar"></div></div>
+</header>
+<section class="card start" id="startScreen">
+  <h2>Instructions</h2>
+  <div class="note"><strong>Part 1 — Listening (10):</strong> listen as many times as you need and choose the best answer. You can change the playback speed.<br><br><strong>Part 2 — Multiple Choice (20):</strong> read each situation carefully and choose the option that best matches the meaning and grammar.<br><br><strong>Immediate feedback:</strong> after you select an answer, the platform will show <strong>Correct!</strong> or <strong>Incorrect.</strong> Your first selection is final, so read or listen carefully before answering.<br><br><strong>Randomized attempt:</strong> the platform selects a different set and order of questions for each new attempt, and answer options are also shuffled.<br><br><strong>Remember:</strong> <em>must / mustn’t</em> express obligation or prohibition. <em>should / shouldn’t</em> express advice or recommendation.</div>
+  <div style="margin-top:16px"><label for="studentName">Student name</label><input id="studentName" type="text" placeholder="Write your full name"></div>
+  <div class="warn">The evaluation lasts 45 minutes. Your progress is saved automatically on this device. If the tab is closed, the browser is closed, or the device turns off, the attempt can continue from the saved question. Leaving the evaluation screen activates a teacher lock.</div>
+  <div class="audio-check">
+      <div class="small" style="margin-bottom:8px"><strong>Audio check:</strong> use the Test audio button before starting. During Listening you can choose Very slow (0.65×), Slow (0.80×), Normal (1.00×), or Fast (1.18×). The selected speed is applied to every listening item, and changing it while audio is playing restarts that audio immediately at the new speed. The platform also prevents two audios from playing at the same time.</div>
+    <strong>🔊 Audio check before starting</strong>
+    <p class="small" style="margin:7px 0 10px">Tap the button and confirm that you can hear a clear English voice. Test the audio before starting so you know your device can play it correctly.</p>
+    <div class="row">
+      <button class="btn secondary" id="testAudioBtn" type="button">▶ Test audio</button>
+      <button class="btn secondary" id="stopAudioBtn" type="button">■ Stop</button>
+      <span id="audioCheckStatus" class="small">Not tested yet.</span>
+    </div>
+  </div>
+  <div style="margin-top:18px" class="row"><button class="btn" id="startBtn" type="button">Start evaluation</button><span class="security-chip">🔒 Security mode active</span></div><div id="savedAttemptBox"></div>
+</section>
+<main id="quiz"></main>
+<section class="card result hidden" id="resultScreen">
+  <h2>Final Result</h2>
+  <div class="summary-grid"><div class="stat"><strong id="gradeBig">0.0</strong><span>Final grade / 5.0</span></div><div class="stat"><strong id="scoreBig">0/30</strong><span>Correct answers</span></div><div class="stat"><strong id="percentBig">0%</strong><span>Percentage</span></div><div class="stat"><strong id="timeBig">--:--</strong><span>Time remaining</span></div></div>
+  <div class="note" id="levelMsg"></div><h3>Review</h3><div class="review" id="review"></div>
+  <div style="margin-top:18px" class="row"><button class="btn secondary" id="teacherResetBtn" type="button">Teacher reset</button></div>
+</section>
+<div class="footer">A1–A2 • Advice, obligation and prohibition</div>
+</div>
+
+<div id="lockOverlay" class="lock-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="lockTitle" translate="no">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <h2 id="lockTitle">Evaluation locked</h2>
+    <div id="lockReason" class="lock-reason">A security event was detected.</div>
+    <p class="small">Teacher authorization is required to continue. Your answers and current question are saved locally.</p>
+    <input id="unlockPassword" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" placeholder="••••" aria-label="Teacher password">
+    <button id="unlockBtn" class="btn" type="button">Unlock</button>
+    <div id="unlockError" class="lock-error"></div>
+  </div>
+</div>
+
+<script>
+const LISTENING = [
+{id:"L1",audio:"I'm very tired, and I have class early tomorrow morning.",question:"Listen and choose the best response.",options:["You should go to bed early tonight.","You mustn’t sleep tonight.","You must wear a seatbelt.","You shouldn’t drink water."],answer:"You should go to bed early tonight.",skill:"Advice"},
+{id:"L2",audio:"This is a hospital. Smoking is prohibited inside the building.",question:"Listen and choose the rule that matches.",options:["You shouldn’t smoke here.","You mustn’t smoke here.","You should smoke outside.","You must smoke here."],answer:"You mustn’t smoke here.",skill:"Prohibition"},
+{id:"L3",audio:"School rule: all students arrive before eight o'clock.",question:"Which sentence expresses the rule correctly?",options:["Students should arrive before 8:00.","Students must arrive before 8:00.","Students mustn’t arrive before 8:00.","Students shouldn’t arrive before 8:00."],answer:"Students must arrive before 8:00.",skill:"Obligation"},
+{id:"L4",audio:"I want to improve my English, but I only practise once a month.",question:"Choose the best advice.",options:["You should practise more often.","You mustn’t practise English.","You must practise only once a month.","You shouldn’t study English."],answer:"You should practise more often.",skill:"Advice"},
+{id:"L5",audio:"The museum sign says: Do not touch the paintings.",question:"What does the sign mean?",options:["Visitors should touch the paintings.","Visitors must touch the paintings.","Visitors mustn’t touch the paintings.","Visitors shouldn’t visit the museum."],answer:"Visitors mustn’t touch the paintings.",skill:"Prohibition"},
+{id:"L6",audio:"I spend all my money in the first week of every month.",question:"Choose the most appropriate advice.",options:["You must spend more money.","You shouldn’t spend all your money.","You mustn’t save money.","You should buy more things."],answer:"You shouldn’t spend all your money.",skill:"Advice against"},
+{id:"L7",audio:"The traffic light is red.",question:"Choose the correct sentence.",options:["Drivers should stop if they want.","Drivers must stop.","Drivers mustn’t stop.","Drivers shouldn’t stop."],answer:"Drivers must stop.",skill:"Obligation"},
+{id:"L8",audio:"My head hurts a lot, and I feel very sick today.",question:"Choose the best advice.",options:["You should see a doctor.","You mustn’t see a doctor.","You should stay awake all night.","You must go to school."],answer:"You should see a doctor.",skill:"Advice"},
+{id:"L9",audio:"During the exam, phones are not allowed.",question:"Which sentence expresses the rule?",options:["Students shouldn’t use phones during the exam.","Students mustn’t use phones during the exam.","Students should use phones during the exam.","Students must use phones during the exam."],answer:"Students mustn’t use phones during the exam.",skill:"Prohibition"},
+{id:"L10",audio:"I drink six cups of coffee at night, and then I can't sleep.",question:"Choose the best advice.",options:["You should drink more coffee at night.","You must drink coffee before bed.","You shouldn’t drink so much coffee at night.","You mustn’t sleep."],answer:"You shouldn’t drink so much coffee at night.",skill:"Advice against"},
+{id:"L11",audio:"I have an important presentation tomorrow, but I haven't prepared anything yet.",question:"Choose the best advice.",options:["You should prepare tonight.","You mustn’t prepare anything.","You should skip the presentation.","You must stay awake for two days."],answer:"You should prepare tonight.",skill:"Advice"},
+{id:"L12",audio:"The laboratory rules say that safety glasses are required at all times.",question:"Which sentence expresses the rule correctly?",options:["You should wear safety glasses.","You must wear safety glasses.","You shouldn’t wear safety glasses.","You mustn’t wear safety glasses."],answer:"You must wear safety glasses.",skill:"Obligation"},
+{id:"L13",audio:"There is a sign on the door that says: Staff only. Visitors are not allowed inside.",question:"What does the sign mean?",options:["Visitors should enter.","Visitors must enter.","Visitors mustn’t enter.","Visitors shouldn’t wait outside."],answer:"Visitors mustn’t enter.",skill:"Prohibition"},
+{id:"L14",audio:"I usually go to bed at two in the morning, and I feel exhausted in class.",question:"Choose the best advice.",options:["You should go to bed earlier.","You mustn’t sleep at night.","You must drink more coffee.","You shouldn’t rest."],answer:"You should go to bed earlier.",skill:"Advice"},
+{id:"L15",audio:"The bus is leaving in five minutes, and we are still far from the station.",question:"Choose the most sensible advice.",options:["We should hurry.","We mustn’t go to the station.","We should walk more slowly.","We must wait until tomorrow."],answer:"We should hurry.",skill:"Advice"},
+{id:"L16",audio:"The swimming pool rule says: No running near the pool.",question:"Which sentence matches the rule?",options:["People should run near the pool.","People must run near the pool.","People mustn’t run near the pool.","People shouldn’t swim."],answer:"People mustn’t run near the pool.",skill:"Prohibition"},
+{id:"L17",audio:"I want to be healthier, but I eat fast food almost every day.",question:"Choose the best advice.",options:["You should eat healthier food more often.","You mustn’t eat any food.","You must eat fast food every day.","You shouldn’t drink water."],answer:"You should eat healthier food more often.",skill:"Advice"},
+{id:"L18",audio:"Airport security requires every passenger to show identification before entering this area.",question:"Which sentence expresses the requirement?",options:["Passengers should show identification.","Passengers must show identification.","Passengers shouldn’t show identification.","Passengers mustn’t show identification."],answer:"Passengers must show identification.",skill:"Obligation"}
+];
+const MCQ = [
+{id:"M1",question:"You look sick. You ___ see a doctor.",options:["should","mustn’t","shouldn’t","must"],answer:"should",skill:"Meaning"},
+{id:"M2",question:"Company rule: all employees ___ wear an ID card.",options:["should","must","shouldn’t","mustn’t"],answer:"must",skill:"Obligation"},
+{id:"M3",question:"During the exam, students ___ use their phones. It is prohibited.",options:["must","should","mustn’t","shouldn’t"],answer:"mustn’t",skill:"Prohibition"},
+{id:"M4",question:"You want to save money. You ___ buy things you don’t need.",options:["must","should","mustn’t","shouldn’t"],answer:"shouldn’t",skill:"Advice against"},
+{id:"M5",question:"Choose the correct sentence.",options:["She should drinks more water.","She should drink more water.","She should to drink more water.","She should drinking more water."],answer:"She should drink more water.",skill:"Structure"},
+{id:"M6",question:"Choose the correct sentence.",options:["He must arrives on time.","He must to arrive on time.","He must arrive on time.","He must arriving on time."],answer:"He must arrive on time.",skill:"Structure"},
+{id:"M7",question:"Students should ___ English outside class.",options:["practises","practising","to practise","practise"],answer:"practise",skill:"Structure"},
+{id:"M8",question:"You mustn’t ___ here. Smoking is prohibited.",options:["smoke","smokes","to smoke","smoking"],answer:"smoke",skill:"Structure"},
+{id:"M9",question:"Which sentence is grammatically correct?",options:["She should study tonight.","She should studies tonight.","She should to study tonight.","She should studying tonight."],answer:"She should study tonight.",skill:"Structure"},
+{id:"M10",question:"What does MUSTN’T express?",options:["A recommendation","A strong prohibition","A good idea","A suggestion"],answer:"A strong prohibition",skill:"Meaning"},
+{id:"M11",question:"What does SHOULDN’T usually express?",options:["A legal requirement","A strong obligation","Advice against something","Permission"],answer:"Advice against something",skill:"Meaning"},
+{id:"M12",question:"Safety rule: employees ___ follow the instructions.",options:["must","shouldn’t","mustn’t","should"],answer:"must",skill:"Obligation"},
+{id:"M13",question:"You are very tired. You ___ stay up all night.",options:["should","must","mustn’t","shouldn’t"],answer:"shouldn’t",skill:"Advice against"},
+{id:"M14",question:"At a red light, drivers ___ stop.",options:["must","shouldn’t","mustn’t","should"],answer:"must",skill:"Obligation"},
+{id:"M15",question:"Zoo rule: visitors ___ feed the animals.",options:["should","must","mustn’t","shouldn’t"],answer:"mustn’t",skill:"Prohibition"},
+{id:"M16",question:"Complete correctly: She ___ more water because she has a headache.",options:["should drink","should drinks","should to drink","should drinking"],answer:"should drink",skill:"Structure"},
+{id:"M17",question:"Which correction is best? “You shouldn’t to stay up late.”",options:["You shouldn’t staying up late.","You shouldn’t stay up late.","You shouldn’t stays up late.","You don’t shouldn’t stay up late."],answer:"You shouldn’t stay up late.",skill:"Error correction"},
+{id:"M18",question:"The workplace rule says helmets are required. Workers ___ wear a helmet.",options:["should","must","shouldn’t","mustn’t"],answer:"must",skill:"Contrast"},
+{id:"M19",question:"The sign says “NO ENTRY”. You ___ enter this room.",options:["should","must","shouldn’t","mustn’t"],answer:"mustn’t",skill:"Contrast"},
+{id:"M20",question:"I want to improve my English speaking. What is the best advice?",options:["You should practise speaking every day.","You mustn’t speak English.","You must study only grammar.","You shouldn’t practise outside class."],answer:"You should practise speaking every day.",skill:"Advice"},
+{id:"M21",question:"Your friend has a job interview tomorrow. What is the best advice?",options:["You should arrive early.","You mustn’t prepare.","You should wear pajamas.","You must stay home."],answer:"You should arrive early.",skill:"Advice"},
+{id:"M22",question:"Library rule: food and drinks are prohibited near the computers. You ___ eat there.",options:["should","must","shouldn’t","mustn’t"],answer:"mustn’t",skill:"Prohibition"},
+{id:"M23",question:"You have an early class tomorrow. You ___ go to bed very late tonight.",options:["should","must","shouldn’t","mustn’t"],answer:"shouldn’t",skill:"Advice against"},
+{id:"M24",question:"The sign says helmets are compulsory. Cyclists ___ wear a helmet.",options:["should","must","shouldn’t","mustn’t"],answer:"must",skill:"Obligation"},
+{id:"M25",question:"Choose the correct sentence.",options:["They must to follow the rules.","They must follows the rules.","They must follow the rules.","They must following the rules."],answer:"They must follow the rules.",skill:"Structure"},
+{id:"M26",question:"Choose the correct sentence.",options:["We shouldn’t spending so much money.","We shouldn’t spend so much money.","We shouldn’t to spend so much money.","We shouldn’t spends so much money."],answer:"We shouldn’t spend so much money.",skill:"Structure"},
+{id:"M27",question:"You want to improve your pronunciation. You ___ listen to English regularly.",options:["should","mustn’t","shouldn’t","must"],answer:"should",skill:"Advice"},
+{id:"M28",question:"Fire exit rule: people ___ block this door.",options:["must","should","mustn’t","shouldn’t"],answer:"mustn’t",skill:"Prohibition"},
+{id:"M29",question:"Your phone battery is almost empty. You ___ charge it before leaving home.",options:["should","mustn’t","shouldn’t","must"],answer:"should",skill:"Advice"},
+{id:"M30",question:"At this factory, protective shoes are required. Workers ___ wear them.",options:["should","must","shouldn’t","mustn’t"],answer:"must",skill:"Obligation"},
+{id:"M31",question:"Which sentence gives advice, not a rule?",options:["You must show your passport.","You mustn’t enter this room.","You should drink more water.","Employees must wear uniforms."],answer:"You should drink more water.",skill:"Contrast"},
+{id:"M32",question:"Which sentence expresses prohibition?",options:["You should rest.","You shouldn’t eat so much sugar.","You must arrive at eight.","You mustn’t park here."],answer:"You mustn’t park here.",skill:"Contrast"},
+{id:"M33",question:"Your friend feels stressed before an exam. What is the best advice?",options:["You should take a short break.","You mustn’t study ever again.","You must fail the exam.","You shouldn’t sleep tonight."],answer:"You should take a short break.",skill:"Advice"},
+{id:"M34",question:"The notice says: 'Keep this door closed at all times.' People ___ keep the door closed.",options:["should","must","shouldn’t","mustn’t"],answer:"must",skill:"Obligation"},
+{id:"M35",question:"You want to save money this month. You ___ order expensive food every day.",options:["must","should","mustn’t","shouldn’t"],answer:"shouldn’t",skill:"Advice against"},
+{id:"M36",question:"Choose the grammatically correct option.",options:["He shouldn’t drives so fast.","He shouldn’t to drive so fast.","He shouldn’t drive so fast.","He shouldn’t driving so fast."],answer:"He shouldn’t drive so fast.",skill:"Structure"},
+{id:"M37",question:"A school notice says: 'Students are required to wear the uniform.' Students ___ wear the uniform.",options:["should","must","shouldn’t","mustn’t"],answer:"must",skill:"Obligation"},
+{id:"M38",question:"You have a bad cold. Which sentence is the best recommendation?",options:["You should rest and drink water.","You mustn’t rest.","You must go running.","You shouldn’t drink anything."],answer:"You should rest and drink water.",skill:"Advice"},
+{id:"M39",question:"Which sentence means 'It is not allowed'?",options:["You shouldn’t talk so loudly.","You should leave early.","You mustn’t enter.","You must arrive early."],answer:"You mustn’t enter.",skill:"Meaning"},
+{id:"M40",question:"Which sentence means 'It is probably a bad idea'?",options:["You mustn’t use this door.","You must show your ID.","You shouldn’t stay up all night.","You must wear a helmet."],answer:"You shouldn’t stay up all night.",skill:"Meaning"}
+];
+const TOTAL=30, TIME_LIMIT=45*60;
+const STORAGE_KEY="modalMixState_secure_v6";
+const V5_KEY="modalMixState_secure_v5";
+const V4_KEY="modalMixState_secure_v4";
+const V3_KEY="modalMixState_secure_v3";
+const LEGACY_KEY="modalMixState";
+const TEACHER_HASH="8e9b669109df89620b94f2387dc53206a82ddc71d658f8f7a2b3a9b417370d3e"; // SHA-256
+let questions=[], current=0, answers={}, graded={}, remaining=TIME_LIMIT, timerHandle=null;
+let audioRate=0.80, activeAudioIdx=null;
+let started=false, finished=false, tabChanges=0, lockRequired=false, isLocked=false, lockReasonText="";
+let voices=[], speechToken=0, speechBusy=false, audioVerified=false, lastVoiceName="";
+let tickCount=0, restoredAttempt=false;
+
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function prepareQuestions(){
+  const l=shuffle(LISTENING).slice(0,10).map(q=>({...q,type:"listening",options:shuffle(q.options)}));
+  const m=shuffle(MCQ).slice(0,20).map(q=>({...q,type:"mcq",options:shuffle(q.options)}));
+  questions=[...l,...m];
+}
+function esc(v){return String(v).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
+
+function statePayload(){return {version:6,questions,current,answers,graded,remaining,studentName:(document.getElementById("studentName")?.value||""),started:!!started&&!finished,finished:false,tabChanges,lockRequired,lockReasonText,audioVerified,audioRate,savedAt:Date.now()}}
+function saveState(force=false){
+  if(finished) return;
+  if(!started && !force) return;
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(statePayload()))}catch(e){}
+}
+function validState(s){return !!(s&&s.started&&Array.isArray(s.questions)&&s.questions.length===TOTAL&&Number.isFinite(Number(s.remaining)))}
+function tryRestore(){
+  let candidates=[];
+  try{candidates.push(localStorage.getItem(STORAGE_KEY));candidates.push(localStorage.getItem(V5_KEY));candidates.push(localStorage.getItem(V4_KEY));candidates.push(localStorage.getItem(V3_KEY));candidates.push(localStorage.getItem(LEGACY_KEY))}catch(e){}
+  for(const raw of candidates){
+    if(!raw) continue;
+    try{
+      const st=JSON.parse(raw); if(!validState(st)) continue;
+      questions=st.questions; current=Math.max(0,Math.min(TOTAL-1,Number(st.current)||0)); answers=st.answers||{}; graded=st.graded||{}; Object.keys(answers).forEach(id=>{if(!(id in graded))graded[id]=true}); remaining=Math.max(0,Number(st.remaining));
+      tabChanges=Number(st.tabChanges)||0; lockRequired=!!st.lockRequired; lockReasonText=st.lockReasonText||"The previous session was interrupted."; audioVerified=!!st.audioVerified; audioRate=Number(st.audioRate)||0.80;
+      const name=document.getElementById("studentName"); if(name){name.value=st.studentName||"";name.readOnly=true}
+      restoredAttempt=true; return true;
+    }catch(e){}
+  }
+  return false;
+}
+async function requestPersistentStorage(){try{if(navigator.storage&&navigator.storage.persist) await navigator.storage.persist()}catch(e){}}
+
+function renderQuiz(){
+  const quiz=document.getElementById("quiz");quiz.innerHTML="";
+  questions.forEach((q,idx)=>{
+    const card=document.createElement("section");
+    card.className="card question-card"+(idx===current?" active":"");
+    card.id="q"+idx;
+    card.setAttribute("translate","no");
+    const sectionName=q.type==="listening"?"LISTENING":"MULTIPLE CHOICE";
+    const isGraded=!!graded[q.id];
+    const selected=answers[q.id];
+    const selectedCorrect=isGraded && selected===q.answer;
+    const feedbackClass=!isGraded?"empty-feedback":(selectedCorrect?"correct-feedback":"incorrect-feedback");
+    const feedbackText=!isGraded?"":(selectedCorrect
+      ? '✓ Correct!<span class="feedback-note">Your answer has been saved.</span>'
+      : '✗ Incorrect.<span class="feedback-note">Your answer has been saved. Continue to the next question.</span>');
+    card.innerHTML=`<div class="qmeta"><span class="qnum">Question ${idx+1} of ${TOTAL}</span><span class="section-tag">${sectionName}</span></div>${
+      q.type==="listening"
+      ? `<div class="audio-panel"><div class="audio-title">🎧 Listen to the audio</div><div class="row"><button type="button" class="btn" data-play="${idx}">▶ Play audio</button><button type="button" class="btn secondary" data-stop>■ Stop</button><label class="small">Speed
+  <select class="speed" id="speed${idx}" data-speed="${idx}">
+    <option value="0.65" ${Math.abs(audioRate-0.65)<0.01?"selected":""}>Very slow — 0.65×</option>
+    <option value="0.80" ${Math.abs(audioRate-0.80)<0.01?"selected":""}>Slow — 0.80×</option>
+    <option value="1.00" ${Math.abs(audioRate-1.00)<0.01?"selected":""}>Normal — 1.00×</option>
+    <option value="1.18" ${Math.abs(audioRate-1.18)<0.01?"selected":""}>Fast — 1.18×</option>
+  </select>
+</label></div><div class="voice-status" id="voiceStatus${idx}">English voice • unlimited replay • changing speed restarts the audio</div></div>`
+      : ""
+    }<div class="qtext">${q.question}</div>
+    <div class="options">${
+      q.options.map(op=>{
+        const chosen=selected===op;
+        const resultClass=isGraded && chosen ? (selectedCorrect?"answer-correct":"answer-incorrect") : "";
+        return `<label class="option ${chosen?"selected":""} ${isGraded?"locked":""} ${resultClass}">
+          <input type="radio" name="${q.id}" value="${esc(op)}" ${chosen?"checked":""} ${isGraded?"disabled":""}>
+          <span>${op}</span>
+        </label>`;
+      }).join("")
+    }</div>
+    <div id="feedback-${q.id}" class="feedback-box ${feedbackClass}">${feedbackText}</div>
+    <div class="nav"><button class="btn secondary" data-prev ${idx===0?"disabled":""}>← Previous</button>${
+      idx<TOTAL-1
+      ? `<button class="btn" data-next>Next →</button>`
+      : `<button class="btn red" data-finish>Finish evaluation</button>`
+    }</div>`;
+    quiz.appendChild(card);
+  });
+
+  quiz.querySelectorAll('input[type="radio"]').forEach(r=>r.addEventListener("change",e=>{
+    const id=e.target.name;
+    if(graded[id]) return;
+    const q=questions.find(item=>item.id===id);
+    if(!q) return;
+
+    answers[id]=e.target.value;
+    graded[id]=true;
+
+    const optionsBox=e.target.closest(".options");
+    optionsBox.querySelectorAll(".option").forEach(o=>{
+      o.classList.remove("selected","answer-correct","answer-incorrect");
+      o.classList.add("locked");
+      const input=o.querySelector('input[type="radio"]');
+      if(input) input.disabled=true;
+    });
+
+    const chosen=e.target.closest(".option");
+    chosen.classList.add("selected");
+    const ok=e.target.value===q.answer;
+    chosen.classList.add(ok?"answer-correct":"answer-incorrect");
+
+    const fb=document.getElementById("feedback-"+id);
+    if(fb){
+      fb.className="feedback-box "+(ok?"correct-feedback":"incorrect-feedback");
+      fb.innerHTML=ok
+        ? '✓ Correct!<span class="feedback-note">Your answer has been saved.</span>'
+        : '✗ Incorrect.<span class="feedback-note">Your answer has been saved. Continue to the next question.</span>';
+    }
+
+    saveState(true);
+    updateProgress();
+  }));
+
+  quiz.querySelectorAll("[data-next]").forEach(b=>b.onclick=()=>go(current+1));
+  quiz.querySelectorAll("[data-prev]").forEach(b=>b.onclick=()=>go(current-1));
+  quiz.querySelectorAll("[data-finish]").forEach(b=>b.onclick=()=>finishQuiz(false));
+  quiz.querySelectorAll("[data-play]").forEach(b=>b.onclick=()=>playAudio(Number(b.dataset.play)));
+  quiz.querySelectorAll("[data-stop]").forEach(b=>b.onclick=stopSpeaking);
+  quiz.querySelectorAll("[data-speed]").forEach(sel=>{
+    sel.addEventListener("change", async e=>{
+      const idx=Number(e.target.dataset.speed);
+      audioRate=parseFloat(e.target.value)||0.80;
+
+      // Keep the same selected speed in every listening item.
+      quiz.querySelectorAll("[data-speed]").forEach(other=>{
+        if(other!==e.target) other.value=String(audioRate);
+      });
+
+      saveState(true);
+
+      const status=document.getElementById("voiceStatus"+idx);
+      if(status) status.textContent="Speed changed to "+audioRate.toFixed(2)+"×.";
+
+      // If audio is currently speaking, restart from the beginning immediately.
+      if(speechBusy && activeAudioIdx===idx){
+        stopSpeaking();
+        await new Promise(r=>setTimeout(r,180));
+        playAudio(idx);
+      }
+    });
+  });
+  updateProgress();
+}
+function go(n){if(isLocked||n<0||n>=questions.length)return;stopSpeaking();document.getElementById("q"+current)?.classList.remove("active");current=n;document.getElementById("q"+current)?.classList.add("active");window.scrollTo({top:0,behavior:"smooth"});saveState(true);updateProgress()}
+function updateProgress(){document.getElementById("progressBar").style.width=((Object.keys(answers).length/TOTAL)*100)+"%"}
+
+function loadVoices(){if(!("speechSynthesis" in window))return[];voices=window.speechSynthesis.getVoices().filter(v=>/^en([-_]|$)/i.test(v.lang||""));return voices}
+if("speechSynthesis" in window){loadVoices();if(typeof speechSynthesis.addEventListener==="function")speechSynthesis.addEventListener("voiceschanged",loadVoices);else speechSynthesis.onvoiceschanged=loadVoices}
+function voiceScore(v){const n=(v.name||"").toLowerCase(),lang=(v.lang||"").toLowerCase();let sc=0;if(lang.startsWith("en-us"))sc+=18;else if(lang.startsWith("en-gb"))sc+=15;else if(lang.startsWith("en"))sc+=10;if(/natural|neural|premium|enhanced/.test(n))sc+=100;if(/jenny|aria|ava|samantha|allison|serena|sonia|guy|ryan/.test(n))sc+=75;if(/google us english|google uk english/.test(n))sc+=65;if(/microsoft/.test(n))sc+=40;if(v.default)sc+=8;if(v.localService)sc+=4;if(/espeak|festival|compact|robot|mbrola/.test(n))sc-=250;return sc}
+async function waitForVoices(maxMs=5000){if(!("speechSynthesis" in window))return[];let f=loadVoices();if(f.length)return f;const t=Date.now();while(Date.now()-t<maxMs){await new Promise(r=>setTimeout(r,120));f=loadVoices();if(f.length)return f}return f}
+function rankedVoices(){loadVoices();return[...voices].sort((a,b)=>voiceScore(b)-voiceScore(a))}
+function setAudioButtonsBusy(busy,activeIdx=null){document.querySelectorAll('[data-play]').forEach(btn=>{btn.disabled=busy;btn.classList.toggle('playing',busy&&Number(btn.dataset.play)===activeIdx)})}
+function stopSpeaking(){speechToken++;speechBusy=false;activeAudioIdx=null;setAudioButtonsBusy(false,null);if("speechSynthesis" in window){try{speechSynthesis.cancel()}catch(e){}}}
+async function speakRobust(text,rate=.80,statusEl=null,activeIdx=null,isTest=false){
+  if(!("speechSynthesis" in window)||typeof SpeechSynthesisUtterance==="undefined"){if(statusEl){statusEl.textContent="Audio is not supported by this browser/device.";statusEl.className="audio-bad"}return false}
+  stopSpeaking();const token=++speechToken;speechBusy=true;activeAudioIdx=activeIdx;setAudioButtonsBusy(true,activeIdx);await waitForVoices();if(token!==speechToken)return false;
+  const candidates=rankedVoices();const tries=candidates.length?candidates.slice(0,6):[null];
+  for(const voice of tries){
+    if(token!==speechToken)return false;
+    const ok=await new Promise(resolve=>{
+      let settled=false,startedAudio=false;const u=new SpeechSynthesisUtterance(text);u.lang=(voice&&voice.lang)||"en-US";if(voice)u.voice=voice;u.rate=Math.max(.55,Math.min(1.25,Number(rate)||.80));u.pitch=1;u.volume=1;
+      const failTimer=setTimeout(()=>{if(settled)return;settled=true;try{speechSynthesis.cancel()}catch(e){}resolve(false)},Math.max(7500,text.length*110));
+      const startTimer=setTimeout(()=>{if(!settled&&!startedAudio){try{speechSynthesis.cancel()}catch(e){}settled=true;clearTimeout(failTimer);resolve(false)}},3000);
+      u.onstart=()=>{startedAudio=true;clearTimeout(startTimer);if(statusEl&&token===speechToken){lastVoiceName=voice?voice.name:"system English voice";statusEl.textContent="Playing at "+Number(rate).toFixed(2)+"× • "+lastVoiceName;statusEl.className=isTest?"audio-ok":"voice-status"}};
+      u.onend=()=>{if(settled)return;settled=true;clearTimeout(startTimer);clearTimeout(failTimer);resolve(true)};u.onerror=()=>{if(settled)return;settled=true;clearTimeout(startTimer);clearTimeout(failTimer);resolve(false)};
+      try{speechSynthesis.cancel();setTimeout(()=>{if(token!==speechToken){if(!settled){settled=true;clearTimeout(startTimer);clearTimeout(failTimer);resolve(false)};return}try{speechSynthesis.resume();speechSynthesis.speak(u)}catch(e){if(!settled){settled=true;clearTimeout(startTimer);clearTimeout(failTimer);resolve(false)}}},140)}catch(e){if(!settled){settled=true;clearTimeout(startTimer);clearTimeout(failTimer);resolve(false)}}
+    });
+    if(ok&&token===speechToken){speechBusy=false;setAudioButtonsBusy(false,null);if(statusEl){statusEl.textContent=(isTest?"✓ Audio works — ":"Ready to replay at "+Number(rate).toFixed(2)+"× • ")+(lastVoiceName||"English voice");statusEl.className=isTest?"audio-ok":"voice-status"}return true}
+  }
+  if(token===speechToken){speechBusy=false;setAudioButtonsBusy(false,null);if(statusEl){statusEl.textContent="Audio could not start. Tap Play again. If it persists, use Chrome, Edge, Safari, or another device.";statusEl.className=isTest?"audio-bad":"voice-status"}}
+  return false;
+}
+async function testAudio(){const btn=document.getElementById("testAudioBtn"),status=document.getElementById("audioCheckStatus");btn.disabled=true;status.textContent="Preparing the best English voice available…";status.className="small";audioVerified=await speakRobust("Audio test. You should hear this sentence clearly and naturally before you start the evaluation.",.92,status,null,true);btn.disabled=false;saveState(true)}
+async function playAudio(idx){
+  if(isLocked)return;
+  const q=questions[idx], speed=document.getElementById("speed"+idx), status=document.getElementById("voiceStatus"+idx);
+  if(!q||!status)return;
+  audioRate=parseFloat(speed?.value||audioRate||"0.80");
+  saveState(true);
+  status.textContent="Preparing audio at "+audioRate.toFixed(2)+"×…";
+  await speakRobust(q.audio,audioRate,status,idx,false);
+}
+
+function fmt(sec){sec=Math.max(0,sec|0);return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0")}
+function tick(){document.getElementById("timer").textContent=fmt(remaining);if(remaining<=0){finishQuiz(true);return}remaining--;tickCount++;if(tickCount%3===0)saveState(true)}
+function startTimer(){if(timerHandle)clearInterval(timerHandle);document.getElementById("timer").textContent=fmt(remaining);timerHandle=setInterval(tick,1000)}
+
+async function startQuiz(){
+  const name=document.getElementById("studentName").value.trim();if(!name){alert("Please write your full name before starting.");document.getElementById("studentName").focus();return}
+  if(restoredAttempt){return resumeSavedAttempt()}
+  if(!questions.length)prepareQuestions();started=true;finished=false;lockRequired=false;isLocked=false;await requestPersistentStorage();
+  document.getElementById("startScreen").classList.add("hidden");renderQuiz();startTimer();saveState(true);try{history.pushState({exam:true},"",location.href)}catch(e){}window.scrollTo({top:0,behavior:"smooth"});
+}
+function resumeSavedAttempt(){
+  started=true;finished=false;document.getElementById("startScreen").classList.add("hidden");renderQuiz();startTimer();saveState(true);try{history.pushState({exam:true},"",location.href)}catch(e){}window.scrollTo({top:0,behavior:"smooth"});if(lockRequired)setTimeout(()=>showLock(lockReasonText||"The previous session was interrupted."),120)
+}
+function finishQuiz(force=false){
+  if(isLocked)return;const unanswered=questions.filter(q=>!answers[q.id]).length;if(!force&&unanswered>0&&!confirm(`You still have ${unanswered} unanswered question(s). Finish anyway?`))return;if(!force&&!confirm("Submit the evaluation now?"))return;
+  finished=true;started=false;if(timerHandle)clearInterval(timerHandle);stopSpeaking();try{localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(V5_KEY);localStorage.removeItem(V4_KEY);localStorage.removeItem(V3_KEY);localStorage.removeItem(LEGACY_KEY)}catch(e){}
+  document.getElementById("quiz").innerHTML="";document.getElementById("resultScreen").classList.remove("hidden");document.getElementById("progressBar").style.width="100%";let score=0,listenScore=0,mcScore=0;
+  questions.forEach(q=>{if(answers[q.id]===q.answer){score++;if(q.type==="listening")listenScore++;else mcScore++}});
+  const pct=Math.round(score/TOTAL*100);
+  const grade=(score/TOTAL*5).toFixed(1);
+  document.getElementById("gradeBig").textContent=grade;
+  document.getElementById("scoreBig").textContent=`${score}/${TOTAL}`;
+  document.getElementById("percentBig").textContent=pct+"%";
+  document.getElementById("timeBig").textContent=fmt(remaining);
+  let msg="";if(score>=27)msg="Excellent control of advice, obligation and prohibition.";else if(score>=23)msg="Good performance. Review the distinctions between advice, obligation and prohibition.";else if(score>=18)msg="Developing. Review SHOULD vs MUST and SHOULDN’T vs MUSTN’T.";else msg="More practice is needed with modal meaning and base-verb structure.";document.getElementById("levelMsg").textContent=msg;
+  const review=document.getElementById("review");review.innerHTML=`<div class="review-item"><strong>Final grade:</strong> ${grade} / 5.0</div><div class="review-item"><strong>Listening:</strong> ${listenScore}/10</div><div class="review-item"><strong>Multiple choice:</strong> ${mcScore}/20</div><div class="review-item"><strong>Security:</strong> ${tabChanges} page-change event(s) registered.</div><div class="review-item"><strong>Answers are not displayed</strong> after submission.</div>`;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function showLock(reason){
+  if(!started||finished)return;stopSpeaking();lockRequired=true;isLocked=true;lockReasonText=reason||"A security event was detected.";saveState(true);document.body.classList.add("exam-locked");const ov=document.getElementById("lockOverlay");document.getElementById("lockReason").textContent=lockReasonText;document.getElementById("unlockPassword").value="";document.getElementById("unlockError").textContent="";ov.classList.remove("hidden");setTimeout(()=>document.getElementById("unlockPassword").focus(),100)
+}
+function lockExam(reason){if(!started||finished)return;showLock(reason)}
+async function sha256(text){const data=new TextEncoder().encode(text);const hash=await crypto.subtle.digest("SHA-256",data);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,"0")).join("")}
+async function unlockExam(){const input=document.getElementById("unlockPassword"),err=document.getElementById("unlockError");const value=input.value.trim();let ok=false;try{ok=(await sha256(value))===TEACHER_HASH}catch(e){ok=value==="1991"}if(!ok){err.textContent="Incorrect teacher password.";input.value="";input.focus();return}lockRequired=false;isLocked=false;lockReasonText="";document.getElementById("lockOverlay").classList.add("hidden");document.body.classList.remove("exam-locked","privacy-blur");saveState(true)}
+async function teacherReset(){const value=prompt("Teacher password required to reset this attempt:");if(value===null)return;let ok=false;try{ok=(await sha256(value.trim()))===TEACHER_HASH}catch(e){ok=value.trim()==="1991"}if(!ok){alert("Incorrect teacher password.");return}try{localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(V5_KEY);localStorage.removeItem(V4_KEY);localStorage.removeItem(V3_KEY);localStorage.removeItem(LEGACY_KEY)}catch(e){}location.reload()}
+
+// Translation deterrence: standardized no-translate hints + common translation-state detection.
+function translationDetected(){const cls=(document.documentElement.className+" "+document.body.className).toLowerCase();return /translated-ltr|translated-rtl/.test(cls)||!!document.querySelector('.goog-te-banner-frame,iframe.goog-te-banner-frame,[class*="translated-"]')}
+const translationObserver=new MutationObserver(()=>{if(document.documentElement.getAttribute("lang")!=="en")document.documentElement.setAttribute("lang","en");if(document.documentElement.getAttribute("translate")!=="no")document.documentElement.setAttribute("translate","no");if(document.body.getAttribute("translate")!=="no")document.body.setAttribute("translate","no");if(started&&!finished&&translationDetected())lockExam("Page translation was detected. Ask the teacher to unlock the evaluation.")});
+translationObserver.observe(document.documentElement,{attributes:true,childList:true,subtree:true,attributeFilter:["class","lang","translate"]});
+
+// Security events. Visibility is used instead of window.blur so mobile keyboards do not trigger false locks.
+document.addEventListener("visibilitychange",()=>{
+  if(!started||finished)return;
+  if(document.hidden){document.body.classList.add("privacy-blur");stopSpeaking();tabChanges++;lockRequired=true;lockReasonText="The evaluation tab was left or the device screen was turned off.";saveState(true)}
+  else{document.body.classList.remove("privacy-blur");if(lockRequired)setTimeout(()=>showLock(lockReasonText),80)}
+});
+window.addEventListener("pagehide",()=>{if(started&&!finished){stopSpeaking();lockRequired=true;lockReasonText="The evaluation page was closed or interrupted.";saveState(true)}});
+window.addEventListener("beforeunload",()=>{if(started&&!finished){lockRequired=true;lockReasonText="The evaluation page was reloaded or closed.";saveState(true)}});
+window.addEventListener("pageshow",()=>{if(started&&lockRequired)setTimeout(()=>showLock(lockReasonText),100)});
+window.addEventListener("popstate",()=>{if(started&&!finished){try{history.pushState({exam:true},"",location.href)}catch(e){}lockExam("Navigation away from the evaluation was blocked.")}});
+window.addEventListener("beforeprint",()=>{if(started&&!finished)lockExam("Printing is not allowed during the evaluation.")});
+
+["copy","cut","paste","contextmenu","dragstart","selectstart"].forEach(ev=>document.addEventListener(ev,e=>{if(started&&!finished&&!isLocked)e.preventDefault()}));
+document.addEventListener("keydown",e=>{
+  if(!started||finished)return;
+  if(e.key==="PrintScreen"){e.preventDefault();try{navigator.clipboard?.writeText("")}catch(x){}lockExam("A screenshot key was detected.");return}
+  if(isLocked)return;
+  const k=(e.key||"").toLowerCase();
+  const blocked=(e.key==="F12")||((e.ctrlKey||e.metaKey)&&["c","x","v","p","u","s","r","l"].includes(k))||((e.ctrlKey||e.metaKey)&&e.shiftKey&&["i","j","c","k"].includes(k));
+  if(blocked){e.preventDefault();lockExam("A restricted browser command was detected.")}
+});
+document.addEventListener("keyup",e=>{if(started&&!finished&&e.key==="PrintScreen")lockExam("A screenshot key was detected.")});
+
+// UI events
+document.getElementById("startBtn").addEventListener("click",startQuiz);
+document.getElementById("testAudioBtn").addEventListener("click",testAudio);
+document.getElementById("stopAudioBtn").addEventListener("click",stopSpeaking);
+document.getElementById("unlockBtn").addEventListener("click",unlockExam);
+document.getElementById("unlockPassword").addEventListener("keydown",e=>{if(e.key==="Enter")unlockExam()});
+document.getElementById("teacherResetBtn")?.addEventListener("click",teacherReset);
+
+// Initialize. An unfinished attempt cannot silently start over; it must be resumed or teacher-reset.
+const restored=tryRestore();
+if(restored){
+  const box=document.getElementById("savedAttemptBox");box.className="saved-attempt";box.innerHTML=`<strong>Saved evaluation found.</strong><br><span class="small">Student: ${esc(document.getElementById("studentName").value||"Saved student")} • Question ${current+1} of ${TOTAL} • Time remaining: ${fmt(remaining)}</span><div class="row" style="margin-top:10px"><button class="btn" id="resumeBtn" type="button">Continue saved evaluation</button><button class="btn secondary" id="resetSavedBtn" type="button">Teacher reset</button></div>`;
+  document.getElementById("startBtn").classList.add("hidden");document.getElementById("resumeBtn").addEventListener("click",resumeSavedAttempt);document.getElementById("resetSavedBtn").addEventListener("click",teacherReset);
+}else{prepareQuestions()}
+
+</script>
+</body>
+</html>
